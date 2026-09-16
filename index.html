@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>24x7 News Time | Latest India, World, Business &amp; Sports News</title>
+  <meta name="description" content="24x7 News Time brings the latest headlines from India and the world in English and Hindi, updated automatically through the day.">
+  <meta name="keywords" content="latest news, India news, Hindi news, breaking news, business news, sports news, 24x7 news">
+  <link rel="canonical" href="https://24x7newstime.in/">
+  <meta name="theme-color" content="#0e1a3d">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="24x7 News Time">
+  <meta property="og:title" content="24x7 News Time | Har pal, har khabar">
+  <meta property="og:description" content="Latest headlines from India and the world in English and Hindi, updated through the day.">
+  <meta property="og:url" content="https://24x7newstime.in/">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23d7262e'/%3E%3Ctext x='32' y='44' font-family='Arial Narrow,Arial' font-weight='700' font-size='26' fill='white' text-anchor='middle'%3E24x7%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Serif+Devanagari:wght@400;600;700&family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+
+  <script>
+    // Apply saved theme before paint to avoid a flash
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "24x7 News Time",
+    "url": "https://24x7newstime.in/",
+    "slogan": "Har pal, har khabar"
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to news</a>
+
+  <div class="utility">
+    <div class="wrap">
+      <div class="utility-left">
+        <span id="today"></span>
+        <span id="updated" class="hide-sm" aria-live="polite"></span>
+      </div>
+      <div class="utility-right">
+        <div class="pill-group" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">English</button>
+          <button type="button" data-lang="hi" aria-pressed="false" lang="hi">हिंदी</button>
+        </div>
+        <button type="button" class="icon-btn" id="themeBtn" aria-label="Switch dark mode">Dark</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="#/top" aria-label="24x7 News Time home">
+        <span class="brand-mark" aria-hidden="true">24x7</span>
+        <span class="brand-name">
+          <strong>News Time</strong>
+          <span id="tagline">Har pal, har khabar</span>
+        </span>
+      </a>
+      <div class="clock" aria-label="Current time in India">
+        <div class="clock-time" id="clock">--:--:--</div>
+        <div class="clock-meta"><span class="live-dot" aria-hidden="true"></span><span id="clockLabel">Live, IST</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav" aria-label="News sections">
+    <div class="wrap">
+      <ul class="nav-list" id="navList"></ul>
+      <form class="search" role="search" id="searchForm">
+        <label class="sr-only" for="q">Search headlines</label>
+        <input id="q" type="search" placeholder="Search headlines" autocomplete="off">
+      </form>
+    </div>
+  </nav>
+
+  <div class="ticker" id="ticker" hidden>
+    <div class="wrap">
+      <div class="ticker-label" id="tickerLabel">Latest</div>
+      <div class="ticker-track"><div class="ticker-move" id="tickerMove"></div></div>
+    </div>
+  </div>
+
+  <main id="content" tabindex="-1">
+    <div class="wrap" id="view">
+      <section class="static-news">
+      <!-- STATIC-NEWS:START -->
+      <p>Latest headlines are loading.</p>
+      <!-- STATIC-NEWS:END -->
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><b>24x7</b>News Time</div>
+          <p id="footerAbout">Headlines from trusted Indian and international publishers, gathered automatically and refreshed through the day. Every story opens on the original publisher's website.</p>
+        </div>
+        <div>
+          <h3>Sections</h3>
+          <ul id="footerSections"></ul>
+        </div>
+        <div>
+          <h3>Company</h3>
+          <ul>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy policy</a></li>
+            <li><a href="disclaimer.html">Disclaimer</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <span>© <span id="year"></span> 24x7 News Time. All rights reserved.</span>
+        <span>News content and trademarks belong to their respective publishers.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

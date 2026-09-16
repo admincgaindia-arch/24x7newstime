@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://24x7newstime.in/sitemap.xml
