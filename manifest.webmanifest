@@ -1,0 +1,1 @@
+{"name": "24x7 News Time", "short_name": "24x7 News", "description": "हर खबर, हर वक्त, आपके साथ", "start_url": "./", "display": "standalone", "background_color": "#ffffff", "theme_color": "#06256a", "lang": "hi", "icons": [{"src": "assets/icon.png", "sizes": "160x160", "type": "image/png"}]}

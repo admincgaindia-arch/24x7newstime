@@ -1,132 +1,51 @@
 <!doctype html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>24x7 News Time | Latest India, World, Business &amp; Sports News</title>
-  <meta name="description" content="24x7 News Time brings the latest headlines from India and the world in English and Hindi, updated automatically through the day.">
-  <meta name="keywords" content="latest news, India news, Hindi news, breaking news, business news, sports news, 24x7 news">
-  <link rel="canonical" href="https://24x7newstime.in/">
-  <meta name="theme-color" content="#0e1a3d">
-
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="24x7 News Time">
-  <meta property="og:title" content="24x7 News Time | Har pal, har khabar">
-  <meta property="og:description" content="Latest headlines from India and the world in English and Hindi, updated through the day.">
-  <meta property="og:url" content="https://24x7newstime.in/">
-  <meta name="twitter:card" content="summary">
-
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23d7262e'/%3E%3Ctext x='32' y='44' font-family='Arial Narrow,Arial' font-weight='700' font-size='26' fill='white' text-anchor='middle'%3E24x7%3C/text%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Noto+Serif+Devanagari:wght@400;600;700&family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
-
-  <script>
-    // Apply saved theme before paint to avoid a flash
-    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "NewsMediaOrganization",
-    "name": "24x7 News Time",
-    "url": "https://24x7newstime.in/",
-    "slogan": "Har pal, har khabar"
-  }
-  </script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>24x7 News Time — हर खबर, हर वक्त, आपके साथ | ताज़ा हिंदी खबरें</title>
+<meta name="description" content="देश, राज्य, दुनिया, खेल, मनोरंजन, बिज़नेस और टेक की ताज़ा हिंदी खबरें और ब्रेकिंग न्यूज़, हर 30 मिनट में अपडेट।">
+<link rel="canonical" href="https://24x7newstime.in/">
+<meta name="theme-color" content="#06256a">
+<meta name="robots" content="max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="24x7 News Time">
+<meta property="og:locale" content="hi_IN">
+<meta property="og:title" content="24x7 News Time — हर खबर, हर वक्त, आपके साथ | ताज़ा हिंदी खबरें">
+<meta property="og:description" content="देश, राज्य, दुनिया, खेल, मनोरंजन, बिज़नेस और टेक की ताज़ा हिंदी खबरें और ब्रेकिंग न्यूज़, हर 30 मिनट में अपडेट।">
+<meta property="og:url" content="https://24x7newstime.in/">
+<meta property="og:image" content="https://24x7newstime.in/assets/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" sizes="160x160" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Khand:wght@500;600;700&family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css?v=3">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "NewsMediaOrganization", "name": "24x7 News Time", "url": "https://24x7newstime.in/", "logo": {"@type": "ImageObject", "url": "https://24x7newstime.in/assets/icon.png"}, "email": "contact@24x7newstime.in", "slogan": "हर खबर, हर वक्त, आपके साथ"}, {"@type": "WebSite", "name": "24x7 News Time", "url": "https://24x7newstime.in/", "inLanguage": "hi-IN"}]}</script>
 </head>
 <body>
-  <a class="skip" href="#content">Skip to news</a>
-
-  <div class="utility">
-    <div class="wrap">
-      <div class="utility-left">
-        <span id="today"></span>
-        <span id="updated" class="hide-sm" aria-live="polite"></span>
-      </div>
-      <div class="utility-right">
-        <div class="pill-group" role="group" aria-label="Language">
-          <button type="button" data-lang="en" aria-pressed="true">English</button>
-          <button type="button" data-lang="hi" aria-pressed="false" lang="hi">हिंदी</button>
-        </div>
-        <button type="button" class="icon-btn" id="themeBtn" aria-label="Switch dark mode">Dark</button>
-      </div>
-    </div>
-  </div>
-
-  <header class="masthead">
-    <div class="wrap">
-      <a class="brand" href="#/top" aria-label="24x7 News Time home">
-        <span class="brand-mark" aria-hidden="true">24x7</span>
-        <span class="brand-name">
-          <strong>News Time</strong>
-          <span id="tagline">Har pal, har khabar</span>
-        </span>
-      </a>
-      <div class="clock" aria-label="Current time in India">
-        <div class="clock-time" id="clock">--:--:--</div>
-        <div class="clock-meta"><span class="live-dot" aria-hidden="true"></span><span id="clockLabel">Live, IST</span></div>
-      </div>
-    </div>
-  </header>
-
-  <nav class="nav" aria-label="News sections">
-    <div class="wrap">
-      <ul class="nav-list" id="navList"></ul>
-      <form class="search" role="search" id="searchForm">
-        <label class="sr-only" for="q">Search headlines</label>
-        <input id="q" type="search" placeholder="Search headlines" autocomplete="off">
-      </form>
-    </div>
-  </nav>
-
-  <div class="ticker" id="ticker" hidden>
-    <div class="wrap">
-      <div class="ticker-label" id="tickerLabel">Latest</div>
-      <div class="ticker-track"><div class="ticker-move" id="tickerMove"></div></div>
-    </div>
-  </div>
-
-  <main id="content" tabindex="-1">
-    <div class="wrap" id="view">
-      <section class="static-news">
-      <!-- STATIC-NEWS:START -->
-      <p>Latest headlines are loading.</p>
-      <!-- STATIC-NEWS:END -->
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-brand"><b>24x7</b>News Time</div>
-          <p id="footerAbout">Headlines from trusted Indian and international publishers, gathered automatically and refreshed through the day. Every story opens on the original publisher's website.</p>
-        </div>
-        <div>
-          <h3>Sections</h3>
-          <ul id="footerSections"></ul>
-        </div>
-        <div>
-          <h3>Company</h3>
-          <ul>
-            <li><a href="about.html">About us</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="privacy.html">Privacy policy</a></li>
-            <li><a href="disclaimer.html">Disclaimer</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="copyright">
-        <span>© <span id="year"></span> 24x7 News Time. All rights reserved.</span>
-        <span>News content and trademarks belong to their respective publishers.</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="assets/app.js"></script>
+<a class="skip" href="#app">खबरों पर जाएं</a>
+<div class="util"><div class="wrap"><span id="today"></span><span class="clock" id="clock"></span><span class="upd" id="upd"></span><button class="theme-btn" id="themeBtn" type="button">डार्क मोड</button></div></div>
+<header class="mast"><div class="wrap">
+<a class="brand" href="./#/" aria-label="24x7 News Time होम"><img src="assets/logo-mark.webp" alt="24x7 News Time" width="224" height="180"></a>
+<p class="mast-tag">हर खबर, हर वक्त<span>आपके साथ</span></p>
+<form class="search" role="search"><label class="vh" for="q">खबरें खोजें</label><input id="q" name="q" type="search" placeholder="खबरें खोजें" autocomplete="off"><button type="submit" aria-label="खोजें"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
+<button class="srch-toggle" type="button" aria-label="खोज खोलें"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+<a class="livebtn" href="./#/taza"><span class="dot" aria-hidden="true"></span>लाइव</a>
+</div></header>
+<nav class="nav" aria-label="सेक्शन"><ul><li><a data-k="home" href="./#/">होम</a></li><li><a data-k="desh" href="./#/c/desh">देश</a></li><li><a data-k="rajya" href="./#/c/rajya">राज्य</a></li><li><a data-k="videsh" href="./#/c/videsh">दुनिया</a></li><li><a data-k="khel" href="./#/c/khel">खेल</a></li><li><a data-k="manoranjan" href="./#/c/manoranjan">मनोरंजन</a></li><li><a data-k="business" href="./#/c/business">बिज़नेस</a></li><li><a data-k="tech" href="./#/c/tech">टेक</a></li><li><a data-k="dharm" href="./#/c/dharm">धर्म</a></li><li><a data-k="lifestyle" href="./#/c/lifestyle">लाइफस्टाइल</a></li><li><a data-k="auto" href="./#/c/auto">ऑटो</a></li><li><a data-k="naukri" href="./#/c/naukri">शिक्षा-नौकरी</a></li><li><a data-k="taza" href="./#/taza">ताज़ा</a></li></ul></nav>
+<div class="ticker" aria-label="ब्रेकिंग न्यूज़"><div class="wrap"><span class="tk-label">ब्रेकिंग</span><div class="tk-view"><div class="tk-track" id="ticker"></div></div></div></div>
+<main id="app" class="wrap" tabindex="-1"><div class="page"><div><div class="hero"><div class="skel" style="aspect-ratio:16/9"></div><div class="skel" style="min-height:320px"></div></div></div><div class="skel" style="height:560px"></div></div>
+<noscript><section class="doc"><h1>ताज़ा हिंदी खबरें</h1><p>खबरें देखने के लिए ब्राउज़र में JavaScript चालू करें।</p></section></noscript></main>
+<button class="fresh" id="fresh" type="button" hidden>नई खबरें आई हैं, देखें</button>
+<footer class="foot"><div class="wrap cols">
+<div><a class="flogo" href="./#/"><img src="assets/logo-mark.webp" alt="24x7 News Time — हर खबर, हर वक्त, आपके साथ" width="224" height="180" loading="lazy"></a>
+<p>देश, राज्य, दुनिया, खेल, मनोरंजन और बिज़नेस की ताज़ा हिंदी खबरें, हर 30 मिनट में अपने आप अपडेट। हर खबर के साथ मूल प्रकाशक का नाम और लिंक दिया जाता है।</p></div>
+<div><h4>सेक्शन</h4><ul><li><a href="./#/c/desh">देश</a></li><li><a href="./#/c/rajya">राज्य</a></li><li><a href="./#/c/videsh">दुनिया</a></li><li><a href="./#/c/khel">खेल</a></li><li><a href="./#/c/manoranjan">मनोरंजन</a></li><li><a href="./#/c/business">बिज़नेस</a></li><li><a href="./#/c/tech">टेक</a></li><li><a href="./#/c/dharm">धर्म</a></li><li><a href="./#/c/lifestyle">लाइफस्टाइल</a></li><li><a href="./#/c/auto">ऑटो</a></li><li><a href="./#/c/naukri">शिक्षा-नौकरी</a></li></ul></div>
+<div><h4>24x7 News Time</h4><ul style="columns:1"><li><a href="about.html">हमारे बारे में</a></li><li><a href="contact.html">संपर्क करें</a></li><li><a href="privacy.html">प्राइवेसी पॉलिसी</a></li><li><a href="disclaimer.html">डिस्क्लेमर</a></li><li><a href="mailto:contact@24x7newstime.in">contact@24x7newstime.in</a></li></ul></div>
+</div><div class="wrap legal"><span>© 2026 24x7 News Time. खबरों के अधिकार उनके मूल प्रकाशकों के पास हैं।</span><span>हर खबर, हर वक्त, आपके साथ</span></div></footer>
+<script src="assets/site.js?v=3" defer></script>
 </body>
 </html>
