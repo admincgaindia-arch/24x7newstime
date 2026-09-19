@@ -70,7 +70,7 @@ return '<li><time datetime="' + new Date(it.ts).toISOString() + '">' + hhmm(it.t
 '<a class="cb-mail" href="mailto:admin.24x7newstime@gmail.com">admin.24x7newstime@gmail.com</a></div></section>' +
 '<section class="box"><h2>सेक्शन</h2><div class="catlinks">' +
 CATS.map(function (c) { return '<a href="#/c/' + c[0] + '">' + c[1] + '</a>'; }).join('') + '</div></section>' +
-'<section class="box"><h2>हमारे बारे में</h2><p class="box-note"><strong>24x7 News Time</strong> पर देश के बड़े हिंदी प्रकाशकों की सुर्खियां हर 30 मिनट में अपने आप जुड़ती हैं। पूरी खबर पढ़ने के लिए शीर्षक पर क्लिक करें, वह मूल प्रकाशक की साइट पर खुलेगी।</p></section>' +
+'<section class="box"><h2>हमारे बारे में</h2><p class="box-note"><strong>24x7 News Time</strong> पर देश के बड़े हिंदी प्रकाशकों की सुर्खियां हर 5 मिनट में अपने आप जुड़ती हैं। पूरी खबर पढ़ने के लिए शीर्षक पर क्लिक करें, वह मूल प्रकाशक की साइट पर खुलेगी।</p></section>' +
 '</aside>';
 }
 function card4(it) {
@@ -205,19 +205,27 @@ BY[x.id] = x;
 d.top = (d.top || []).filter(function (id) { return !astro[id]; });
 d.ticker = (d.ticker || []).filter(function (id) { return !astro[id]; });
 }
-function load(first) {
-return fetch('data/news.json?t=' + Math.floor(Date.now() / 120000), { cache: 'no-store' })
+var SRC = ['https://raw.githubusercontent.com/admincgaindia-arch/24x7newstime/data/news.json', 'data/news.json'];
+function getData(i) {
+i = i || 0;
+return fetch(SRC[i] + '?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' })
 .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-.then(function (d) {
-if (!d || !d.items || !d.items.length) throw new Error('empty');
-if (first) { ingest(d); ticker(); route(); setUpdated(); return; }
-if (DATA && d.updated !== DATA.updated) {
-var pill = document.getElementById('fresh');
-pill.hidden = false;
-pill.onclick = function () { pill.hidden = true; ingest(d); ticker(); route(); setUpdated(); window.scrollTo({ top: 0 }); };
+.then(function (d) { if (!d || !d.items || !d.items.length) throw new Error('empty'); return d; })
+.catch(function (e) { if (i + 1 < SRC.length) return getData(i + 1); throw e; });
 }
-})
-.catch(function () {
+function apply(d) { ingest(d); ticker(); route(); setUpdated(); }
+function load(first) {
+return getData(0).then(function (d) {
+if (first) { apply(d); return; }
+if (!DATA || d.updated === DATA.updated) return;
+if (Date.parse(d.updated) < Date.parse(DATA.updated)) return;
+var chatOpen = document.body.classList.contains('chat-open');
+if (window.scrollY < 400 && !chatOpen) { var y = window.scrollY; apply(d); window.scrollTo(0, y); return; }
+var pill = document.getElementById('fresh');
+if (!pill) return;
+pill.hidden = false;
+pill.onclick = function () { pill.hidden = true; apply(d); window.scrollTo({ top: 0 }); };
+}).catch(function () {
 if (first) app.innerHTML = '<div class="empty">खबरें लोड नहीं हो सकीं। इंटरनेट कनेक्शन जांचें और पेज रीफ्रेश करें।</div>';
 });
 }
@@ -269,10 +277,66 @@ if (app) location.hash = target; else location.href = './' + target;
 });
 var st = document.querySelector('.srch-toggle');
 if (st) st.addEventListener('click', function () { form.classList.toggle('open'); if (form.classList.contains('open')) form.q.focus(); });
+var BOT = 'https://cga.app.n8n.cloud/webhook/newsbot';
+var chatHist = [];
+function chatInit() {
+var btn = document.createElement('button');
+btn.className = 'ai-fab'; btn.type = 'button'; btn.setAttribute('aria-label', 'AI न्यूज़ साथी से पूछें');
+btn.innerHTML = '<span class="ai-dot"></span><strong>AI</strong><span>पूछें</span>';
+var box = document.createElement('section');
+box.className = 'ai-box'; box.hidden = true; box.setAttribute('aria-label', 'न्यूज़ साथी चैट');
+box.innerHTML = '<header class="ai-h"><div><strong>न्यूज़ साथी</strong><span>AI से कुछ भी पूछें</span></div><button type="button" class="ai-x" aria-label="चैट बंद करें">×</button></header>' +
+'<div class="ai-msgs" aria-live="polite"></div>' +
+'<div class="ai-chips"></div>' +
+'<form class="ai-f"><label class="vh" for="aiq">अपना सवाल लिखें</label><input id="aiq" type="text" maxlength="400" placeholder="अपना सवाल लिखें…" autocomplete="off"><button type="submit" aria-label="भेजें">➤</button></form>' +
+'<p class="ai-note">AI के जवाब में गलती हो सकती है। खबर की पुष्टि मूल स्रोत से करें।</p>';
+document.body.appendChild(box); document.body.appendChild(btn);
+var msgs = box.querySelector('.ai-msgs'), form = box.querySelector('.ai-f'), inp = box.querySelector('input'), chips = box.querySelector('.ai-chips');
+function add(role, html) {
+var d = document.createElement('div'); d.className = 'ai-m ' + role; d.innerHTML = html; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d;
+}
+add('bot', 'नमस्ते! मैं <b>न्यूज़ साथी</b> हूं, 24x7 News Time का AI सहायक। ताज़ा खबरें, किसी राज्य का हाल, या कोई भी सवाल पूछिए।');
+['आज की बड़ी खबरें', 'हरियाणा की ताज़ा खबर', 'खेल की खबरें', 'बिज़नेस अपडेट'].forEach(function (c) {
+var b = document.createElement('button'); b.type = 'button'; b.textContent = c; b.onclick = function () { ask(c); }; chips.appendChild(b);
+});
+var busy = false;
+function ask(q) {
+q = String(q || '').trim(); if (!q || busy) return;
+busy = true; chips.hidden = true;
+add('me', esc(q));
+var wait = add('bot typing', '<span></span><span></span><span></span>');
+var ctl = window.AbortController ? new AbortController() : null;
+var to = setTimeout(function () { if (ctl) ctl.abort(); }, 30000);
+fetch(BOT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: q, history: chatHist.slice(-6), page: location.pathname + location.hash }), signal: ctl ? ctl.signal : undefined })
+.then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+.then(function (j) {
+var reply = (j && j.reply) ? String(j.reply) : '';
+if (!reply) throw new Error('empty');
+wait.className = 'ai-m bot'; wait.innerHTML = reply;
+wait.querySelectorAll('a').forEach(function (a) { a.target = '_blank'; a.rel = 'noopener'; });
+chatHist.push({ role: 'user', text: q }); chatHist.push({ role: 'bot', text: wait.textContent.slice(0, 300) });
+})
+.catch(function () {
+wait.className = 'ai-m bot';
+wait.innerHTML = 'माफ़ कीजिए, अभी जवाब नहीं आ पाया। थोड़ी देर बाद फिर पूछें, या <a href="https://wa.me/918689096000" target="_blank" rel="noopener">WhatsApp करें</a>।';
+})
+.then(function () { clearTimeout(to); busy = false; msgs.scrollTop = msgs.scrollHeight; });
+}
+form.addEventListener('submit', function (e) { e.preventDefault(); var q = inp.value; inp.value = ''; ask(q); });
+function open(o) {
+box.hidden = !o; document.body.classList.toggle('chat-open', o); btn.setAttribute('aria-expanded', String(o));
+if (o) setTimeout(function () { inp.focus(); }, 50);
+}
+btn.addEventListener('click', function () { open(box.hidden); });
+box.querySelector('.ai-x').addEventListener('click', function () { open(false); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) open(false); });
+}
+chatInit();
 var tt = document.getElementById('totop');
 if (tt) window.addEventListener('scroll', function () { tt.hidden = window.scrollY < 900; }, { passive: true });
 if (app) {
 load(true);
-setInterval(function () { load(false); setUpdated(); }, 5 * 60000);
+setInterval(function () { load(false); }, 2 * 60000);
+setInterval(setUpdated, 60000);
 }
 })();
