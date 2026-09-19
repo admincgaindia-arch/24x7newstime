@@ -64,32 +64,58 @@ return '<aside class="side">' +
 l.map(function (it) {
 return '<li><time datetime="' + new Date(it.ts).toISOString() + '">' + hhmm(it.ts) + '</time><a ' + ext(it) + '>' + esc(it.t) + '</a></li>';
 }).join('') + '</ol><a class="all" href="#/taza">सभी ताज़ा खबरें ›</a></section>' +
+'<section class="box cbox"><h2>खबर या विज्ञापन दें</h2><div class="cbox-b"><p>अपने इलाके की खबर, फोटो या विज्ञापन के लिए संपर्क करें।</p>' +
+'<a class="cb-btn call" href="tel:+918689096000">📞 86890 96000</a><a class="cb-btn call" href="tel:+919996647888">📞 99966 47888</a>' +
+'<a class="cb-btn wa" href="https://wa.me/918689096000" target="_blank" rel="noopener">WhatsApp पर भेजें</a>' +
+'<a class="cb-mail" href="mailto:admin.24x7newstime@gmail.com">admin.24x7newstime@gmail.com</a></div></section>' +
 '<section class="box"><h2>सेक्शन</h2><div class="catlinks">' +
 CATS.map(function (c) { return '<a href="#/c/' + c[0] + '">' + c[1] + '</a>'; }).join('') + '</div></section>' +
 '<section class="box"><h2>हमारे बारे में</h2><p class="box-note"><strong>24x7 News Time</strong> पर देश के बड़े हिंदी प्रकाशकों की सुर्खियां हर 30 मिनट में अपने आप जुड़ती हैं। पूरी खबर पढ़ने के लिए शीर्षक पर क्लिक करें, वह मूल प्रकाशक की साइट पर खुलेगी।</p></section>' +
 '</aside>';
 }
+function card4(it) {
+return '<a class="c4" ' + ext(it) + '>' + thumb(it) + '<h3>' + esc(it.t) + '</h3>' + meta(it) + '</a>';
+}
 function home() {
 var used = {};
 var top = DATA.top.map(function (id) { return BY[id]; }).filter(Boolean);
-var lead = top.filter(function (x) { return x.img; })[0] || top[0] || latest()[0];
+var withImg = top.filter(function (x) { return x.img; });
+var lead = withImg[0] || top[0] || latest()[0];
 used[lead.id] = 1;
-var side = top.filter(function (x) { return !used[x.id]; }).slice(0, 5);
+var subs = withImg.filter(function (x) { return !used[x.id]; }).slice(0, 3);
+subs.forEach(function (x) { used[x.id] = 1; });
+var side = top.filter(function (x) { return !used[x.id]; }).slice(0, 6);
 side.forEach(function (x) { used[x.id] = 1; });
 var h = '<div class="page"><div>';
-h += '<section class="hero" aria-label="बड़ी खबरें"><article class="lead"><a ' + ext(lead) + '>' +
-'<div class="th">' + (lead.img ? '<img src="' + esc(lead.img) + '" alt="" fetchpriority="high" referrerpolicy="no-referrer">' : '') + '<span class="badge">बड़ी खबर</span></div>' +
-'<h1>' + esc(lead.t) + '</h1></a>' + (lead.d ? '<p>' + esc(lead.d) + '</p>' : '') + meta(lead, true) + share(lead) + '</article>' +
+h += '<section class="hero" aria-label="बड़ी खबरें"><div class="hero-main"><article class="lead"><a class="lead-link" ' + ext(lead) + '>' +
+'<div class="th lead-th">' + (lead.img ? '<img src="' + esc(lead.img) + '" alt="" fetchpriority="high" referrerpolicy="no-referrer">' : '') +
+'<div class="lead-over"><span class="badge">बड़ी खबर</span><h1>' + esc(lead.t) + '</h1>' + meta(lead, true) + '</div></div></a>' +
+(lead.d ? '<p class="lead-d">' + esc(lead.d) + '</p>' : '') + share(lead) + '</article>' +
+'<div class="subs">' + subs.map(card4).join('') + '</div></div>' +
 '<div class="tops"><h2>टॉप खबरें</h2>' + side.map(row).join('') + '</div></section>';
+var pics = latest().filter(function (x) { return x.img && !used[x.id] && !ASTRO.test(x.t) && (x.c === 'manoranjan' || x.c === 'khel' || x.c === 'videsh' || x.c === 'desh'); }).slice(0, 10);
+if (pics.length >= 4) {
+h += '<section class="sec pics" aria-label="तस्वीरों में">' + secHead('तस्वीरों में', '') + '<div class="strip">' +
+pics.map(function (it) { return '<a class="pic" ' + ext(it) + '><div class="th">' + '<img src="' + esc(it.img) + '" alt="" loading="lazy" referrerpolicy="no-referrer"></div><span>' + esc(it.t) + '</span></a>'; }).join('') + '</div></section>';
+}
+var GRID = { khel: 1, manoranjan: 1, tech: 1, lifestyle: 1, auto: 1 };
 CATS.forEach(function (c) {
 var list = byCat(c[0]).filter(function (x) { return !used[x.id]; });
 if (list.length < 3) return;
+var body;
+if (GRID[c[0]]) {
+var g = list.filter(function (x) { return x.img; }).slice(0, 4);
+if (g.length < 4) g = list.slice(0, 4);
+g.forEach(function (x) { used[x.id] = 1; });
+body = '<div class="grid4">' + g.map(card4).join('') + '</div>';
+} else {
 var f = list.filter(function (x) { return x.img; })[0] || list[0];
 var rest = list.filter(function (x) { return x !== f; }).slice(0, 4);
 used[f.id] = 1; rest.forEach(function (x) { used[x.id] = 1; });
-h += '<section class="sec" aria-label="' + c[1] + '">' + secHead(c[1], '#/c/' + c[0]) +
-'<div class="block"><article><a class="feat" ' + ext(f) + '>' + thumb(f) + '<h3>' + esc(f.t) + '</h3>' +
-(f.d ? '<p>' + esc(f.d) + '</p>' : '') + '</a>' + meta(f) + '</article><div class="tops">' + rest.map(row).join('') + '</div></div></section>';
+body = '<div class="block"><article><a class="feat" ' + ext(f) + '>' + thumb(f) + '<h3>' + esc(f.t) + '</h3>' +
+(f.d ? '<p>' + esc(f.d) + '</p>' : '') + '</a>' + meta(f) + '</article><div class="tops">' + rest.map(row).join('') + '</div></div>';
+}
+h += '<section class="sec sec-' + c[0] + '" aria-label="' + c[1] + '">' + secHead(c[1], '#/c/' + c[0]) + body + '</section>';
 });
 h += '</div>' + sidebar() + '</div>';
 return h;
@@ -113,12 +139,12 @@ var states = {};
 list.forEach(function (x) { if (x.st) states[x.st] = (states[x.st] || 0) + 1; });
 var names = Object.keys(states).sort(function (a, b) { return states[b] - states[a]; });
 if (names.length) {
-chips = '<div class="chips" role="group" aria-label="राज्य चुनें"><button type="button" data-st="" aria-pressed="' + (!stateFilter) + '">सभी राज्य</button>' +
-names.map(function (n) { return '<button type="button" data-st="' + esc(n) + '" aria-pressed="' + (stateFilter === n) + '">' + esc(n) + '</button>'; }).join('') + '</div>';
+chips = '<div class="chips" role="group" aria-label="राज्य चुनें"><a href="#/c/rajya" aria-current="' + (!stateFilter) + '">सभी राज्य</a>' +
+names.map(function (n) { return '<a href="#/c/rajya/' + encodeURIComponent(n) + '" aria-current="' + (stateFilter === n) + '">' + esc(n) + ' <small>' + states[n] + '</small></a>'; }).join('') + '</div>';
 }
 if (stateFilter) list = list.filter(function (x) { return x.st === stateFilter; });
 }
-return listView(CAT[c], list, { chips: chips });
+return listView(stateFilter ? stateFilter + ' की खबरें' : CAT[c], list, { chips: chips, empty: 'इस राज्य की अभी कोई ताज़ा खबर नहीं है। सभी राज्य देखें या थोड़ी देर बाद आएं।' });
 }
 function search(q) {
 var words = q.toLowerCase().split(/\s+/).filter(Boolean);
@@ -133,6 +159,7 @@ if (!DATA) return;
 var hsh = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
 var parts = hsh.split('/'), key = 'home', html, title = '24x7 News Time — हर खबर, हर वक्त, आपके साथ';
 if (parts[0] === 'c' && CAT[parts[1]]) {
+stateFilter = parts[1] === 'rajya' && parts[2] ? parts[2] : '';
 key = parts[1]; html = category(parts[1]); title = CAT[parts[1]] + ' की ताज़ा खबरें — 24x7 News Time';
 } else if (parts[0] === 'taza') {
 key = 'taza'; html = listView('ताज़ा खबरें', latest(), { withCat: true }); title = 'ताज़ा खबरें — 24x7 News Time';
@@ -144,6 +171,9 @@ html = home();
 }
 app.innerHTML = html;
 document.title = title;
+document.querySelectorAll('.states a').forEach(function (a) {
+if (stateFilter && a.textContent === stateFilter) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+});
 document.querySelectorAll('.nav a').forEach(function (a) {
 if (a.getAttribute('data-k') === key) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
 });
@@ -200,12 +230,10 @@ img.parentNode.classList.add('noimg'); img.remove();
 document.addEventListener('click', function (e) {
 var m = e.target.closest('[data-more]');
 if (m) { shown += PAGE; var y = window.scrollY; route(); window.scrollTo(0, y); return; }
-var s = e.target.closest('[data-st]');
-if (s) { stateFilter = s.getAttribute('data-st'); shown = PAGE; route(); }
+if (e.target.closest('#totop')) { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 });
 window.addEventListener('hashchange', function () {
 shown = PAGE;
-if (!/^#\/c\/rajya/.test(location.hash)) stateFilter = '';
 route();
 window.scrollTo(0, 0);
 });
@@ -241,6 +269,8 @@ if (app) location.hash = target; else location.href = './' + target;
 });
 var st = document.querySelector('.srch-toggle');
 if (st) st.addEventListener('click', function () { form.classList.toggle('open'); if (form.classList.contains('open')) form.q.focus(); });
+var tt = document.getElementById('totop');
+if (tt) window.addEventListener('scroll', function () { tt.hidden = window.scrollY < 900; }, { passive: true });
 if (app) {
 load(true);
 setInterval(function () { load(false); setUpdated(); }, 5 * 60000);
