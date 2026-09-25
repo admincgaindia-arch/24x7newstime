@@ -279,6 +279,35 @@ var st = document.querySelector('.srch-toggle');
 if (st) st.addEventListener('click', function () { form.classList.toggle('open'); if (form.classList.contains('open')) form.q.focus(); });
 var BOT = 'https://cga.app.n8n.cloud/webhook/newsbot';
 var chatHist = [];
+var CHAT_ALIAS = [['बिजनेस', 'business'], ['व्यापार', 'business'], ['शेयर', 'business'], ['बाजार', 'business'], ['क्रिकेट', 'khel'], ['स्पोर्ट', 'khel'], ['विदेश', 'videsh'], ['दुनिया', 'videsh'], ['नौकरी', 'naukri'], ['शिक्षा', 'naukri'], ['रिजल्ट', 'naukri'], ['फिल्म', 'manoranjan'], ['बॉलीवुड', 'manoranjan'], ['मोबाइल', 'tech'], ['टेक', 'tech'], ['गाड़ी', 'auto'], ['कार', 'auto'], ['धर्म', 'dharm'], ['सेहत', 'lifestyle'], ['हेल्थ', 'lifestyle']];
+var CHAT_STOP = { 'की': 1, 'के': 1, 'का': 1, 'में': 1, 'से': 1, 'है': 1, 'हैं': 1, 'और': 1, 'पर': 1, 'को': 1, 'क्या': 1, 'आज': 1, 'खबर': 1, 'खबरें': 1, 'ताजा': 1, 'अपडेट': 1, 'बताओ': 1, 'बताइए': 1, 'news': 1, 'latest': 1, 'the': 1 };
+function nk(s) { return String(s || '').toLowerCase().replace(/\u093c/g, ''); }
+function localReply(q) {
+var ready = DATA ? Promise.resolve(DATA) : getData(0).then(function (d) { ingest(d); return d; });
+return ready.then(function (d) {
+var s = nk(q), list = [], title = '';
+var states = {}; d.items.forEach(function (x) { if (x.st) states[x.st] = 1; });
+var st = Object.keys(states).filter(function (k) { return s.indexOf(nk(k)) >= 0; })[0];
+var cat = null;
+CATS.forEach(function (c) { if (s.indexOf(nk(c[1])) >= 0 || s.indexOf(c[0]) >= 0) cat = c[0]; });
+if (!cat) CHAT_ALIAS.forEach(function (a) { if (!cat && s.indexOf(nk(a[0])) >= 0) cat = a[1]; });
+if (st) { list = d.items.filter(function (x) { return x.st === st; }); title = st + ' की ताज़ा खबरें'; }
+else if (cat) { list = d.items.filter(function (x) { return x.c === cat; }); title = CAT[cat] + ' की ताज़ा खबरें'; }
+if (!list.length && /बडी|मुख्य|सुर्खि|टॉप|top|headline|breaking|ब्रेकिंग/.test(s)) { list = (d.top || []).map(function (id) { return BY[id]; }).filter(Boolean); title = 'आज की बड़ी खबरें'; }
+if (!list.length) {
+var words = s.split(/[\s,.?!।|:;'"()-]+/).filter(function (w) { return w.length > 1 && !CHAT_STOP[w]; });
+if (words.length) {
+list = d.items.map(function (x) { var t = nk(x.t + ' ' + (x.d || '')), sc = 0; words.forEach(function (w) { if (t.indexOf(w) >= 0) sc++; }); return { x: x, sc: sc }; })
+.filter(function (o) { return o.sc > 0; }).sort(function (a, b) { return b.sc - a.sc || b.x.ts - a.x.ts; }).map(function (o) { return o.x; });
+if (list.length) title = 'आपके सवाल से जुड़ी खबरें';
+}
+}
+if (!list.length) { list = (d.top || []).map(function (id) { return BY[id]; }).filter(Boolean); title = 'आज की बड़ी खबरें'; }
+list = list.slice(0, 5);
+if (!list.length) throw new Error('none');
+return '<b>' + esc(title) + ':</b><ol>' + list.map(function (x) { return '<li><a href="' + esc(x.u) + '">' + esc(x.t) + '</a> <small>— ' + esc(x.s) + '</small></li>'; }).join('') + '</ol>';
+});
+}
 function chatInit() {
 var btn = document.createElement('button');
 btn.className = 'ai-fab'; btn.type = 'button'; btn.setAttribute('aria-label', 'AI न्यूज़ साथी से पूछें');
@@ -317,8 +346,14 @@ wait.querySelectorAll('a').forEach(function (a) { a.target = '_blank'; a.rel = '
 chatHist.push({ role: 'user', text: q }); chatHist.push({ role: 'bot', text: wait.textContent.slice(0, 300) });
 })
 .catch(function () {
+return localReply(q).then(function (html) {
+wait.className = 'ai-m bot'; wait.innerHTML = html;
+wait.querySelectorAll('a').forEach(function (a) { a.target = '_blank'; a.rel = 'noopener'; });
+chatHist.push({ role: 'user', text: q }); chatHist.push({ role: 'bot', text: wait.textContent.slice(0, 300) });
+}).catch(function () {
 wait.className = 'ai-m bot';
 wait.innerHTML = 'माफ़ कीजिए, अभी जवाब नहीं आ पाया। थोड़ी देर बाद फिर पूछें, या <a href="https://wa.me/918689096000" target="_blank" rel="noopener">WhatsApp करें</a>।';
+});
 })
 .then(function () { clearTimeout(to); busy = false; msgs.scrollTop = msgs.scrollHeight; });
 }
