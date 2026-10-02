@@ -1,0 +1,43 @@
+name: Update news
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout scripts
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Build news.json
+        run: node scripts/fetch-news.mjs
+
+      - name: Publish to data branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          mkdir -p out
+          cp news.json out/news.json
+          cd out
+          git init -q
+          git checkout -q -b data
+          git config user.name "24x7 News Bot"
+          git config user.email "actions@github.com"
+          git add news.json
+          git commit -q -m "news $(TZ=Asia/Kolkata date '+%d %b %Y %H:%M') IST"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" data
+          echo "pushed to data branch"
