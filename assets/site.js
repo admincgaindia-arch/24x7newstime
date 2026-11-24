@@ -70,7 +70,7 @@ return '<li><time datetime="' + new Date(it.ts).toISOString() + '">' + hhmm(it.t
 '<a class="cb-mail" href="mailto:admin.24x7newstime@gmail.com">admin.24x7newstime@gmail.com</a></div></section>' +
 '<section class="box"><h2>सेक्शन</h2><div class="catlinks">' +
 CATS.map(function (c) { return '<a href="#/c/' + c[0] + '">' + c[1] + '</a>'; }).join('') + '</div></section>' +
-'<section class="box"><h2>हमारे बारे में</h2><p class="box-note"><strong>24x7 News Time</strong> पर देश के बड़े हिंदी प्रकाशकों की सुर्खियां हर 5 मिनट में अपने आप जुड़ती हैं। पूरी खबर पढ़ने के लिए शीर्षक पर क्लिक करें, वह मूल प्रकाशक की साइट पर खुलेगी।</p></section>' +
+'<section class="box"><h2>हमारे बारे में</h2><p class="box-note"><strong>24x7 News Time</strong> पर देश के बड़े हिंदी प्रकाशकों की सुर्खियां हर 30 मिनट में अपने आप जुड़ती हैं। पूरी खबर पढ़ने के लिए शीर्षक पर क्लिक करें, वह मूल प्रकाशक की साइट पर खुलेगी।</p></section>' +
 '</aside>';
 }
 function card4(it) {
