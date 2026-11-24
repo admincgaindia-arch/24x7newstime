@@ -1,4 +1,4 @@
-/* 24x7 News Time — Sponsor Ads (photo banners) v4
+/* 24x7 News Time — Sponsor Ads (photo + CSS banners) v5
    Images: /assets/ads/*.jpg  |  Naya ad = ADS list mein ek block copy karein. */
 (function () {
   var ADS = [
@@ -28,6 +28,51 @@
       cta: "फ्री डेमो लें", link: "https://praceasy.in/",
       mock: true,
       color: "#6C3BF4", color2: "#E8469B", accent: "#12B5A8"
+    },
+    {
+      brand: "SnaXup", sub: "हेल्दी स्नैक्स · ड्राई फ्रूट्स",
+      call: "89294 46677", tel: "tel:+918929446677",
+      l1: "मखाना | ग्रेनोला | ट्रेल मिक्स | ग्रीन टी", l2: "35% तक छूट · फ्री शिपिंग · COD उपलब्ध",
+      cta: "ऑर्डर करें", link: "https://www.snaxup.com/",
+      color: "#14703c", color2: "#0a4526", accent: "#f6a609",
+      panels: [
+        { bg: "linear-gradient(135deg,#14703c,#0a4526)", fg: "#fff", kick: "SnaXup", kickC: "#ffd27a",
+          head: "35% तक छूट", headC: "#f6a609", sub: "ड्राई फ्रूट्स · गिफ्ट हैम्पर",
+          chips: [["फ्री शिपिंग", "#f6a609", "#113a22"], ["COD", "rgba(255,255,255,.18)", "#fff"]] },
+        { bg: "#fdf6e6", fg: "#143a24", kick: "क्या मिलेगा", kickC: "#14703c",
+          head: "रोस्टेड मखाना<br>ग्रेनोला · ग्रीन टी", headC: "#14703c", sub: "बल्क ऑर्डर पर भारी छूट",
+          chips: [["ड्राई फ्रूट्स", "#14703c", "#fff"], ["ट्रेल मिक्स", "#f6a609", "#143a24"]] }
+      ]
+    },
+    {
+      brand: "IndiSpaces", sub: "ऑफिस स्पेस · दिल्ली NCR",
+      web: "indispaces.in",
+      l1: "को-वर्किंग | मैनेज्ड | प्राइवेट ऑफिस", l2: "ज़ीरो ब्रोकरेज · 24 घंटे में ऑफिस",
+      cta: "ऑफिस खोजें", link: "https://indispaces.in/",
+      color: "#1b2a5c", color2: "#0b1230", accent: "#22c3a6",
+      panels: [
+        { bg: "linear-gradient(135deg,#1b2a5c,#0b1230)", fg: "#fff", kick: "IndiSpaces", kickC: "#7fe3d0",
+          head: "ZERO ब्रोकरेज", headC: "#22c3a6", sub: "वेरिफाइड ऑफिस · सीधे मालिक से",
+          chips: [["24 घंटे में ऑफिस", "#22c3a6", "#0b1230"]] },
+        { bg: "#eef2fb", fg: "#1b2a5c", kick: "कहाँ-कहाँ", kickC: "#5a6ba0",
+          head: "दिल्ली · नोएडा<br>गुड़गांव", headC: "#1b2a5c", sub: "",
+          chips: [["को-वर्किंग", "#1b2a5c", "#fff"], ["प्राइवेट ऑफिस", "#22c3a6", "#0b1230"]] }
+      ]
+    },
+    {
+      brand: "MyWorx", sub: "प्रीमियम को-वर्किंग, नोएडा",
+      web: "myworx.in",
+      l1: "फ्लेक्सिबल डेस्क | प्राइवेट ऑफिस", l2: "मीटिंग रूम · बिज़नेस कम्युनिटी",
+      cta: "वर्कस्पेस बुक करें", link: "https://www.myworx.in/",
+      color: "#2c2535", color2: "#141019", accent: "#ff6b35",
+      panels: [
+        { bg: "linear-gradient(135deg,#2c2535,#141019)", fg: "#fff", kick: "MyWorx · Noida", kickC: "#ffb18f",
+          head: "प्रीमियम<br>को-वर्किंग", headC: "#ff6b35", sub: "फ्लेक्सिबल डेस्क से प्राइवेट ऑफिस तक",
+          chips: [] },
+        { bg: "#fff3ed", fg: "#2c2535", kick: "आपके लिए", kickC: "#b8431c",
+          head: "डेस्क · केबिन<br>मीटिंग रूम", headC: "#2c2535", sub: "",
+          chips: [["डे पास", "#ff6b35", "#fff"], ["मंथली प्लान", "#2c2535", "#fff"], ["कम्युनिटी", "#ffd9c9", "#b8431c"]] }
+      ]
     }
   ];
   var ROTATE_MS = 7000;
@@ -56,6 +101,14 @@
   ".nt-bn__dots{position:absolute;bottom:6px;right:10px;display:flex;gap:5px;z-index:2}",
   ".nt-bn__dots i{width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.4);opacity:.5}",
   ".nt-bn__dots i.on{opacity:1}",
+  ".nt-pnl{flex:1 1 0;min-width:0;overflow:hidden;border-radius:5px;padding:9px 11px;display:flex;flex-direction:column;justify-content:center;gap:3px}",
+  ".nt-pnl__k{font-size:9.5px;font-weight:700;line-height:1.3;letter-spacing:.3px;opacity:.9}",
+  ".nt-pnl__h{font-family:var(--head,var(--body,system-ui));font-weight:700;font-size:21px;line-height:1.08;letter-spacing:.3px}",
+  ".nt-pnl__s{font-size:10.5px;line-height:1.3;opacity:.82}",
+  ".nt-pnl__c{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}",
+  ".nt-pnl__c span{font-size:10px;font-weight:700;line-height:1.1;padding:3px 7px;border-radius:999px;white-space:nowrap}",
+  "@media (max-width:760px){.nt-pnl{padding:10px 11px}.nt-pnl+.nt-pnl{display:none}",
+  " .nt-pnl__h{font-size:20px}.nt-pnl__s{font-size:10.5px}}",
   ".nt-mock{flex:1;border-radius:6px;background:#f6f4ff;border:1px solid #e4defc;padding:8px 10px;display:flex;flex-direction:column;justify-content:center;gap:5px;font-size:13px;line-height:1.3;color:#2b2150}",
   ".nt-mock__h{display:flex;align-items:center;gap:6px;font-weight:700}",
   ".nt-mock__row{display:flex;justify-content:space-between;background:#fff;border-radius:4px;padding:3px 8px;border-left:3px solid var(--a)}",
@@ -106,6 +159,22 @@
     return m;
   }
 
+  function panel(p) {
+    var d = el("div", "nt-pnl");
+    d.style.background = p.bg; d.style.color = p.fg;
+    if (p.kick) { var k = el("div", "nt-pnl__k", p.kick); k.style.color = p.kickC || p.fg; d.appendChild(k); }
+    var h = el("div", "nt-pnl__h"); h.style.color = p.headC || p.fg;
+    String(p.head).split("<br>").forEach(function (ln, i) { if (i) h.appendChild(el("br")); h.appendChild(document.createTextNode(ln)); });
+    d.appendChild(h);
+    if (p.sub) d.appendChild(el("div", "nt-pnl__s", p.sub));
+    if (p.chips && p.chips.length) {
+      var c = el("div", "nt-pnl__c");
+      p.chips.forEach(function (ch) { var sp = el("span", "", ch[0]); sp.style.background = ch[1]; sp.style.color = ch[2]; c.appendChild(sp); });
+      d.appendChild(c);
+    }
+    return d;
+  }
+
   function banner(box, ad, idx, dots, lazy) {
     box.innerHTML = "";
     box.style.setProperty("--c", ad.color);
@@ -115,13 +184,15 @@
     var l = el("div", "nt-bn__l");
     l.appendChild(link("nt-bn__brand", ad.brand, ad.link));
     l.appendChild(el("div", "nt-bn__sub", ad.sub));
-    l.appendChild(link("nt-bn__call", "Call : " + ad.call, ad.tel));
+    if (ad.call) l.appendChild(link("nt-bn__call", "Call : " + ad.call, ad.tel));
+    else if (ad.web) l.appendChild(link("nt-bn__call", ad.web, ad.link));
     var m = el("div", "nt-bn__m");
     m.appendChild(el("div", "nt-bn__t1", ad.l1));
     m.appendChild(el("div", "nt-bn__t2", ad.l2));
     m.appendChild(link("nt-bn__cta", ad.cta, ad.link));
     var r = el("div", "nt-bn__r");
     if (ad.mock) r.appendChild(mock(ad));
+    else if (ad.panels) ad.panels.forEach(function (p) { r.appendChild(panel(p)); });
     else (ad.imgs || []).forEach(function (src) {
       var im = el("img"); im.src = src; im.alt = ad.alt || ad.brand; im.width = 320; im.height = 180; im.decoding = "async";
       if (lazy) im.loading = "lazy";
@@ -163,6 +234,7 @@
       x.onclick = function () { w.remove(); document.body.classList.remove("nt-has-sticky"); try { sessionStorage.setItem("nt-ad-closed", "1"); } catch (e) {} };
       w.appendChild(x);
       if (ad.imgs && ad.imgs[0]) { var im = el("img"); im.src = ad.imgs[0]; im.alt = ""; w.appendChild(im); }
+      else if (ad.panels) { var pn = panel(ad.panels[0]); pn.style.cssText += ";flex:none;width:64px;height:40px;padding:4px 6px;gap:0"; pn.querySelector(".nt-pnl__h").style.fontSize = "13px"; var sb = pn.querySelector(".nt-pnl__s"), cb = pn.querySelector(".nt-pnl__c"); if (sb) sb.remove(); if (cb) cb.remove(); w.appendChild(pn); }
       var b = el("div", "nt-sticky__b", ad.brand); b.appendChild(el("span", "", ad.l1)); w.appendChild(b);
       w.appendChild(link("nt-bn__cta", ad.cta, ad.link));
     }
